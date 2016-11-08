@@ -1,0 +1,38 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增预定</title>
+</head>
+
+<body>
+
+<form action="public/book/order" method="get">
+	简要说明：<input type="text" name="" /><br />
+	完整说明：<textarea name="" ></textarea><br />
+	起始时间：<input type="text" name="" /> <input type="text" name="" /><br />
+	结束时间：<input type="text" name="" /> <input type="text" name="" /><br />
+    类型：<select name="">
+    	 	<option> 1 </option>
+			<option> 2 </option>
+         	<option> 3 </option>
+         	<option> 4 </option>         
+         </select>
+         <br />
+    确定状态：<input type="radio" name="1" />暂定
+    		<input type="radio" name="1" />确定<br />
+    重复类型：<input type="radio" name="2" />不重复 
+    		<input type="radio" name="2" />每天 
+            <input type="radio" name="2" />每周 
+            <input type="radio" name="2" />每月 
+            <input type="radio" name="2" />每年 
+            <br />
+    结束重复的日期：<input type="text" name="" /><br />
+	跳过以前的冲突：<input type="checkbox" name="" /><br /><br />
+	<input type="button" value="后退" />
+    <input type="submit" value="保存" />
+</form>
+
+</body>
+</html>
