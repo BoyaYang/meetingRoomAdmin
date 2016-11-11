@@ -22,7 +22,7 @@
 
 ***
 
-## Login: http://www.boardroom.com/api/post/sessions
+## Login: http://www.boardroom.com/api/post/sessions/users
 ***
 - **投递方式**：POST  
 -  **投递内容**：{
