@@ -11,7 +11,6 @@ class UserController extends Controller
     public function register()
     {
         return user_ins()->register();
-
     }
 
     public function login()

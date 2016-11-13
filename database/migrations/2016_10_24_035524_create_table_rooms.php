@@ -15,7 +15,8 @@ class CreateTableRooms extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->increments('rooms_id');
             $table->unsignedInteger('admin_id');
-            $table->string('room_name',20);
+            $table->unsignedInteger('area_id');
+            $table->string('room_name',25);
             $table->unsignedInteger('status');
             $table->unsignedInteger('type');
             $table->unsignedInteger('allow_book');
@@ -27,12 +28,13 @@ class CreateTableRooms extends Migration
             $table->unsignedInteger('allow_remind');
             $table->unsignedInteger('allow_private_book');
             $table->text('html')->nullable();
-            $table->text('desc');
+            $table->text('description');
             $table->unsignedInteger('galleryful'); //容纳人数
             $table->text('goods')->nullable();
             $table->timestamps();
 
             $table->foreign('admin_id')->references('admin_id')->on('admins');
+            $table->foreign('area_id')->references('area_id')->on('area');
         });
     }
 

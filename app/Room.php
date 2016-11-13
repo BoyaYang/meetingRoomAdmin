@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
+
     public function newRoom()
     {
     	if(!user_ins()->is_logged_in())
@@ -92,17 +93,109 @@ class Room extends Model
     
     public function checkRoom()
     {
+    	$id = rq('room_id');
+    	if(!$id)
+    		return ['status'=>0,'msg'=>'room_id is required'];
     	
+    	$room = $this->find($id);
+    	if(!$room)
+    		return ['status'=>0,'msg'=>'room not exists'];
+    	return ['status'=>1,'data'=>$room];
     }
     
     public function updateRoom()
     {
+    	if(!user_ins()->is_logged_in())
+    	{
+    		return ['status'=>0,'msg'=>'login required'];
+    	}
     	
+    	$room_id = rq('room_id');
+    	if(!$room_id)
+    		return ['status'=>0,'msg'=>'room_id is required'];
+    	
+    	$room = $this->find($room_id);
+    	if(!$room)
+    		return ['status'=>0,'msg'=>'room not exists'];
+    	 
+    	$admin_id = rq('admin_id');
+    	$area_id = rq('area_id');
+    	$room_name = rq('room_name');
+    	$status = rq('status');
+    	$type = rq('type');
+    	$allow_book = rq('allow_book');
+    	$office_time = rq('office_time');
+    	$closing_time = rq('closing_time');
+    	$time_length = rq('time_length');
+    	$meeting_time = rq('meeting_time');
+    	$need_permission = rq('need_permission');
+    	$allow_remind = rq('allow_remind');
+    	$allow_private_book = rq('allow_private_book');
+    	$html = rq('html');
+    	$description = rq('description');
+    	$galleryful = rq('galleryful');
+    	$goods = rq('goods');
+    	 
+    	
+    	if($admin_id)
+    		$room->admin_id = $admin_id;
+    	if($area_id)
+    		$room->area_id = $area_id;
+    	if($room_name)
+    		$room->room_name = $room_name;
+    	if($status)
+    		$room->room_name = $room_name;
+    	if($type)
+    		$room->room_name = $room_name;
+    	if($allow_book)
+    		$room->allow_book = $allow_book;
+    	if($office_time)
+    		$room->office_time = $office_time;
+    	if($closing_time)
+    		$room->closing_time = $closing_time;
+    	if($time_length)
+    		$room->time_length = $time_length;
+    	if($meeting_time)
+    		$room->meeting_time = $meeting_time;
+    	if($need_permission)
+    		$room->need_permission = $need_permission;
+    	if($allow_remind)
+    		$room->allow_remind = $allow_remind;
+    	if($allow_private_book)
+    		$room->allow_private_book = $allow_private_book;
+    	if($html)
+    		$room->html = $html;
+    	if($description)
+    		$room->description = $description;
+    	if($galleryful)
+    		$room->galleryful = $galleryful;
+    	if($goods)
+    		$room->goods = $goods;
+    	
+    	return $room->save()?
+    	['status'=>1,'room_id'=>$room->room_id]:
+    	['status'=>0,'msg'=>'db update failed'];
+    	 
     }
     
     public function deleteRoom()
     {
+    	if(!user_ins()->is_logged_in())
+    	{
+    		return ['status'=>0,'msg'=>'login required'];
+    	}
     	
+    	$room_id = rq('room_id');
+    	if(!$room_id)
+    		return ['status'=>0,'msg'=>'room_id is required'];
+    	 
+    	$room = $this->find($room_id);
+    	if(!$room)
+    		return ['status'=>0,'msg'=>'room not exists'];
+    	
+    	return $room->delete()?
+    	['status'=>1]:
+    	['status'=>0,'msg'=>'db delete failed'];
     }
     
     
