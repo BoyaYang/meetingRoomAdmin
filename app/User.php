@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    public function register(){
+
+    public function register()
+    {
         $username = rq('username');
         $password = rq('password');
         $phone = rq('phone');
@@ -41,30 +43,35 @@ class User extends Model
             ['status'=>0,'msg'=>'db insert failed'];
     }
 
-    public function login(){
+    public function login()
+    {
 
         $username = rq('username');
         $password = rq('password');
         /*检查用户名和密码是否为空*/
 
-        if(!$username){
+        if(!$username)
+        {
             return ['status'=>0, 'msg'=>'username required'];
         }
 
-        if(!$password){
+        if(!$password)
+        {
             return ['status'=>0, 'msg'=>'password required'];
         }
 
         /*检查用户是否存在*/
         $user = $this->where('username',$username)->first();//返回数据库的第一条
 
-        if(!$user) {
+        if(!$user) 
+        {
             return ['status'=>0, 'msg'=>'user not exists'];
         }
 
         /*检查密码是否正确*/
         $hashed_password = $user->password;
-        if(!Hash::check($password,$hashed_password)){
+        if(!Hash::check($password,$hashed_password))
+        {
             return ['status'=>0, 'msg'=>'wrong password'];
         }
 
@@ -77,7 +84,8 @@ class User extends Model
     }
 
     /*检测用户是否登录*/
-    public function is_logged_in(){
+    public function is_logged_in()
+    {
         /*如果session中存在user_id就返回user_id,否则返回false*/
         return session('user_id')?true: false;
         //return session()->all();

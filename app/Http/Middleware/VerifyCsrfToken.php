@@ -14,6 +14,15 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         'api/post/users',
         'api/post/sessions',
-        'api/post/orders'
+        'api/post/orders',
+        'api/post/rooms',
+        'api/post/areas',
+        'api/get/orders',
+        'api/put/orders',
+        'api/put/rooms',
+        'api/delete/orders',
+        'api/delete/rooms',
+        'api/delete/areas'
+        
     ];
 }
