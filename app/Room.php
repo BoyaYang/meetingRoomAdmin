@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
 
+	protected $table = 'rooms';
+	
+	protected $primaryKey = 'room_id';
+	
     public function newRoom()
     {
     	if(!user_ins()->is_logged_in())
@@ -27,7 +31,6 @@ class Room extends Model
     	$need_permission = rq('need_permission');
     	$allow_remind = rq('allow_remind');
     	$allow_private_book = rq('allow_private_book');
-    	$html = rq('html');
     	$description = rq('description');
     	$galleryful = rq('galleryful');
     	$goods = rq('goods');
@@ -58,8 +61,6 @@ class Room extends Model
     		return ['status'=>0,'msg'=>'allow_remind required'];
     	if(!$allow_private_book)
     		return ['status'=>0,'msg'=>'allow_private_book required'];
-    	if(!$html)
-    		return ['status'=>0,'msg'=>'html required'];
     	if(!$description)
     		return ['status'=>0,'msg'=>'description required'];
     	if(!$galleryful)
@@ -80,7 +81,6 @@ class Room extends Model
     	$this->need_permission = $need_permission;
     	$this->allow_remind = $allow_remind;
     	$this->allow_private_book = $allow_private_book;
-    	$this->html = $html;
     	$this->description = $description;
     	$this->galleryful = $galleryful;
     	$this->goods = $goods;
@@ -131,7 +131,6 @@ class Room extends Model
     	$need_permission = rq('need_permission');
     	$allow_remind = rq('allow_remind');
     	$allow_private_book = rq('allow_private_book');
-    	$html = rq('html');
     	$description = rq('description');
     	$galleryful = rq('galleryful');
     	$goods = rq('goods');
@@ -163,8 +162,6 @@ class Room extends Model
     		$room->allow_remind = $allow_remind;
     	if($allow_private_book)
     		$room->allow_private_book = $allow_private_book;
-    	if($html)
-    		$room->html = $html;
     	if($description)
     		$room->description = $description;
     	if($galleryful)

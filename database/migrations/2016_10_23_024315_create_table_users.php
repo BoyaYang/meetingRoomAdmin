@@ -17,7 +17,8 @@ class CreateTableUsers extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('phone',30);
-            $table->string('email');
+            $table->string('email')->nullable();
+            $table->string('auth')->default('user');  //enum  user,admin
             $table->rememberToken()->nullable();
             $table->timestamps();
         });

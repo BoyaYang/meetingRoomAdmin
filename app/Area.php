@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
+	
+	protected $table = 'areas';
+	
+	protected $primaryKey = 'area_id';
+	
 	public function newArea()
 	{
 		/*验证用户是否登录*/
@@ -16,14 +21,11 @@ class Area extends Model
 
 		$admin_id = rq('admin_id');
 		$area_name = rq('area_name');
-		$html = rq('html');
 		
 		if(!$admin_id)
 			return ['status'=>0,'msg'=>'admin_id required'];
 		if(!$area_name)
 			return ['status'=>0,'msg'=>'area_name required'];
-		if(!$html)
-			return ['status'=>0,'msg'=>'html required'];
 		
 		$area_exists = $this
 		->where('area_name',$area_name)
@@ -35,7 +37,6 @@ class Area extends Model
 		$area = $this;
 		$area->admin_id = $admin_id;
 		$area->area_name = $area_name;
-		$area->html = $html;
 		
 		return $area->save()?
 		['status'=>1,'area_id'=>$user->area_id]:

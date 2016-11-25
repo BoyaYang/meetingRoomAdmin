@@ -15,20 +15,17 @@ class CreateTableOrders extends Migration
         Schema::create('orders',function (Blueprint $table){
 
         	$table->increments('order_id');
-        	$table->unsignedInteger('user_id')->nullable;
-        	$table->unsignedInteger('admin_id');
+        	$table->unsignedInteger('user_id')->nullable();
+        	$table->unsignedInteger('admin_id')->nullable();
         	$table->text('brief_desc');
         	$table->text('inte_desc');
-        	$table->dateTime('start_time');
-        	$table->dateTime('end_time');
+        	$table->timestamps('start_time');
+        	$table->timestamps('end_time');
         	$table->unsignedInteger('type');
         	$table->unsignedInteger('status');
-        	$table->unsignedInteger('repeat_type');
-        	$table->dateTime('stop_repeat_time');
-        	$table->unsignedInteger('skip_same');
         	$table->timestamps();
         	
-        	$table->foreign('admin_id')->references('admin_id')->on('admins');
+        	$table->foreign('admin_id')->references('user_id')->on('users');
         	$table->foreign('user_id')->references('user_id')->on('users');
         });
     }

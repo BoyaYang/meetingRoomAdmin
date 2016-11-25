@@ -16,10 +16,9 @@ class CreateTableAreas extends Migration
             $table->increments('area_id');
             $table->unsignedInteger('admin_id');
             $table->string('area_name',30);
-            $table->text('html')->nullable();
             $table->timestamps();
             
-            $table->foreign('admin_id')->references('admin_id')->on('admins');
+            $table->foreign('admin_id')->references('user_id')->on('users');
         });
     }
 

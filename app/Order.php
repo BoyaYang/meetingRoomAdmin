@@ -3,9 +3,120 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Order extends Model
 {
+	
+	protected $table = 'orders';
+	
+	protected $primaryKey = 'order_id';
+	
+	private $user_id;
+    private $room_id;
+    private $admin_id;
+    private $brief_desc;
+    private $inte_desc;
+    private $start_time;
+    private $end_time;
+    private $type;
+    private $status;
+    private $repeat_type;
+    private $stop_repeat_time;
+    private $skip_same;
+	
+	//protected $fillable = {}
+	
+	private function judgeTime()
+	{
+		
+	}
+	
+	private function saveOrder()
+	{
+		switch ($repeat_type)
+		{
+			//no reputation
+			case 0:{
+				return $this->save()?
+				['status'=>1,'order_id'=>$this->order_id]:
+				['status'=>0,'msg'=>'db insert failed'];
+				break;
+			}
+			//each day
+			case 1:{
+				$endTime = Carbon::parse($stop_repeat_time);
+				do
+				{
+					$beginTime = Carbon::parse($start_time);
+					$temTime = Carbon::parse($end_time);
+					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+					
+					$beginTime->addDays(1);
+					$temTime->addDays(1);
+					$start_time = $beginTime->toDateTimeString();
+					$end_time = $temTime->toDateTimeString();
+				}while($beginTime->lt($endTime));
+				
+				return ['status'=>1];
+			}
+			//each week
+			case 2:{
+				$endTime = Carbon::parse($stop_repeat_time);
+				do
+				{
+					$beginTime = Carbon::parse($start_time);
+					$temTime = Carbon::parse($end_time);
+					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+						
+					$beginTime->addWeeks(1);
+					$temTime->addWeeks(1);
+					$start_time = $beginTime->toDateTimeString();
+					$end_time = $temTime->toDateTimeString();
+				}while($beginTime->lt($endTime));
+				
+				return ['status'=>1];
+				break;
+			}
+			//each month
+			case 3:{
+				$endTime = Carbon::parse($stop_repeat_time);
+				do
+				{
+					$beginTime = Carbon::parse($start_time);
+					$temTime = Carbon::parse($end_time);
+					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+			
+					$beginTime->addMonths(1);
+					$temTime->addMonths(1);
+					$start_time = $beginTime->toDateTimeString();
+					$end_time = $temTime->toDateTimeString();
+				}while($beginTime->lt($endTime));
+			
+				return ['status'=>1];
+				break;
+			}
+			//each year
+			case 4:{
+				$endTime = Carbon::parse($stop_repeat_time);
+				do
+				{
+					$beginTime = Carbon::parse($start_time);
+					$temTime = Carbon::parse($end_time);
+					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+						
+					$beginTime->addYears(1);
+					$temTime->addYears(1);
+					$start_time = $beginTime->toDateTimeString();
+					$end_time = $temTime->toDateTimeString();
+				}while($beginTime->lt($endTime));
+					
+				return ['status'=>1];
+				break;
+			}
+		}
+	}
+	
     public function newOrder()
     {
         /*验证用户是否登录*/
@@ -13,7 +124,7 @@ class Order extends Model
         {
             return ['status'=>0,'msg'=>'login required'];
         }
-
+        
         $user_id = rq('user_id');
         $room_id = rq('room_id');
         $admin_id = rq('admin_id');
@@ -43,12 +154,6 @@ class Order extends Model
             return ['status'=>0,'msg'=>'type required'];
         if(!$status)
             return ['status'=>0,'msg'=>'status required'];
-        if(!$repeat_type)
-            return ['status'=>0,'msg'=>'repeat_type required'];
-        if(!$stop_repeat_time)
-            return ['status'=>0,'msg'=>'stop_repeat_time required'];
-        if(!$skip_same)
-            return ['status'=>0,'msg'=>'skip_same required'];
 
         $this->user_id = $user_id;
         $this->admin_id = $admin_id;
@@ -59,13 +164,10 @@ class Order extends Model
         $this->end_time = $end_time;
         $this->type = $type;
         $this->status = $status;
-        $this->repeat_type = $repeat_type;
         $this->stop_repeat_time = $stop_repeat_time;
-        $this->skip_same = $skip_same;
-
-        return $this->save()?
-            ['status'=>1,'order_id'=>$this->order_id]:
-            ['status'=>0,'msg'=>'db insert failed'];
+        $this->repeat_type = $repeat_type;
+        
+        return saveOrder();
     }
     
     public function updateOrder()

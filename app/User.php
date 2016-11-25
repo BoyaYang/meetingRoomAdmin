@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
 
+	protected $table = 'users';
+	
+	protected $primaryKey = 'user_id';
+	
     public function register()
     {
         $username = rq('username');
         $password = rq('password');
         $phone = rq('phone');
         $email = rq('email');
+        $auth = rq('auth');
         if(!$username)
             return ['status'=>0,'msg'=>'username required'];
         if(!$password)
@@ -22,7 +27,8 @@ class User extends Model
             return ['status'=>0,'msg'=>'phone_number required'];
         if(!$email)
             return ['status'=>0,'msg'=>'email required'];
-
+        if(!$auth)
+        	return ['status'=>0,'msg'=>'auth required'];
         $user_exists = $this
             ->where('username',$username)
             ->exists();
@@ -37,7 +43,7 @@ class User extends Model
         $user->username = $username;
         $user->phone = $phone;
         $user->email = $email;
-
+		$user->auth = $auth;
         return $user->save()?
             ['status'=>1,'user_id'=>$user->user_id]:
             ['status'=>0,'msg'=>'db insert failed'];
