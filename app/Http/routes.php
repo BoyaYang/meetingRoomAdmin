@@ -64,7 +64,7 @@ Route::group(['middleware' => ['web']], function ()
     	Route::group(['prefix'=>'post'],function()
     	{
     		Route::post('users',['as'=>'register','uses'=>'UserController@register']);
-    		Route::post('sessions',['as'=>'login', 'uses'=>'UserController@login']);
+    		Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
     		Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
     		Route::post('areas',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
     		Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
@@ -86,7 +86,7 @@ Route::group(['middleware' => ['web']], function ()
     	{
     		Route::post('orders',['as'=>'deleteOrder','uses'=>'OrderController@deleteOrder']);
     		Route::post('rooms',['as'=>'deleteRoom','uses'=>'RoomController@deleteOrder']);
-    		Route::post('sessions/users',['as'=>'logout','uses'=>'UserController@logout']);
+    		Route::post('users/token',['as'=>'logout','uses'=>'UserController@logout']);
     		Route::post('areas',['as'=>'deleteArea','uses'=>'AreaController@deleteArea']);
     	});
 });

@@ -17,8 +17,8 @@ class CreateTableOrders extends Migration
         	$table->increments('order_id');
         	$table->unsignedInteger('user_id')->nullable();
         	$table->unsignedInteger('admin_id')->nullable();
-        	$table->text('brief_desc');
-        	$table->text('inte_desc');
+        	$table->text('brief_description');
+        	$table->text('inte_description');
         	$table->timestamps('start_time');
         	$table->timestamps('end_time');
         	$table->unsignedInteger('type');

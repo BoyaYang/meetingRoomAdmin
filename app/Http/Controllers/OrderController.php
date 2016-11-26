@@ -13,6 +13,11 @@ class OrderController extends Controller
         return order_ins()->newOrder();
     }
     
+    public function checkOrder()
+    {
+    	return room_ins()->checkOrder();
+    }
+    
     public function updateOrder()
     {
     	return order_ins()->updateOrder();
