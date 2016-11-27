@@ -13,12 +13,12 @@ class CreateTableAreas extends Migration
     public function up()
     {
         Schema::create('areas', function (Blueprint $table) {
-            $table->increments('area_id');
+            $table->increments('id');
             $table->unsignedInteger('admin_id');
             $table->string('area_name',30);
             $table->timestamps();
             
-            $table->foreign('admin_id')->references('user_id')->on('users');
+            $table->foreign('admin_id')->references('id')->on('users');
         });
     }
 

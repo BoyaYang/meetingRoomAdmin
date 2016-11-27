@@ -13,16 +13,15 @@ class CreateTableRooms extends Migration
     public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {
-        	
-            $table->increments('rooms_id');
+            $table->increments('id');
             $table->unsignedInteger('admin_id');
             $table->unsignedInteger('area_id');
             $table->string("admin_email");
             $table->string('room_name',25);
             $table->unsignedInteger('status')->default(0);
             $table->unsignedInteger('allow_book')->default(0);
-            $table->dateTime('office_time')->default('00:00');
-            $table->dateTime('closing_time')->default('23:59');
+            $table->dateTime('office_time');
+            $table->dateTime('closing_time');
             $table->unsignedInteger('time_length')->default(1440);
             $table->unsignedInteger('default_time_length')->default(1440);
             $table->unsignedInteger('need_permission')->default(0);
@@ -34,8 +33,8 @@ class CreateTableRooms extends Migration
             $table->text('goods')->nullable();
             $table->timestamps();
 
-            $table->foreign('admin_id')->references('user_id')->on('users');
-            $table->foreign('area_id')->references('area_id')->on('area');
+            $table->foreign('admin_id')->references('id')->on('users');
+            $table->foreign('area_id')->references('id')->on('area');
         });
     }
 

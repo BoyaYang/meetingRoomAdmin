@@ -17,4 +17,19 @@ class UserController extends Controller
     {
         return user_ins()->login();
     }
+    
+    public function logout()
+    {
+    	return user_ins()->logout();
+    }
+    
+    public function deleteUser()
+    {
+    	return user_ins()->deleteRoom();
+    }
+    
+    public function test()
+    {
+    	return dd(user_ins()->is_logged_in());
+    }
 }

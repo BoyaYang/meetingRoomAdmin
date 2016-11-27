@@ -10,7 +10,7 @@ class Order extends Model
 	
 	protected $table = 'orders';
 	
-	protected $primaryKey = 'order_id';
+	protected $primaryKey = 'id';
 	
 	private $user_id;
     private $room_id;

@@ -9,7 +9,25 @@ class Room extends Model
 
 	protected $table = 'rooms';
 	
-	protected $primaryKey = 'room_id';
+	protected $primaryKey = 'id';
+	
+	public function getInfo()
+	{
+		/*return Request::only('admin_id',
+							 'area_id',
+							 'room_name',
+							 'status',
+							 'type',
+							 'allow_book',
+							 'office_time',
+							 'closing_time',
+							 'time_length',
+							 'meeting_time',
+							 'need_permission',
+							 'allow_remind',
+							 'allow_private_book');*/
+		return Request::all();
+	}
 	
     public function newRoom()
     {
@@ -175,22 +193,22 @@ class Room extends Model
     	 
     }
     
-    public function deleteRoom()
+    public function deleteUser()
     {
     	if(!user_ins()->is_logged_in())
     	{
     		return ['status'=>0,'msg'=>'login required'];
     	}
     	
-    	$room_id = rq('room_id');
-    	if(!$room_id)
-    		return ['status'=>0,'msg'=>'room_id is required'];
+    	$user_id = rq('room_id');
+    	if(!$user_id)
+    		return ['status'=>0,'msg'=>'user_id is required'];
     	 
-    	$room = $this->find($room_id);
-    	if(!$room)
-    		return ['status'=>0,'msg'=>'room not exists'];
+    	$user = $this->find($room_id);
+    	if(!$user)
+    		return ['status'=>0,'msg'=>'user not exists'];
     	
-    	return $room->delete()?
+    	return $user->delete()?
     	['status'=>1]:
     	['status'=>0,'msg'=>'db delete failed'];
     }

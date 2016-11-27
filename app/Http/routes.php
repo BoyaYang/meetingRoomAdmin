@@ -14,7 +14,7 @@
 function rq($key=null,$default=null)
 {
     if(!$key) return Request::all();
-    else return Request::get($key,$default);
+    else return Request::input($key,$default);
 }
 
 function user_ins()
@@ -55,38 +55,30 @@ Route::get('/', function ()
 |
 */
 
-Route::group(['middleware' => ['web']], function ()
+Route::group(['middleware' => ['web'/*'GetUserFromToken','RefreshToken']*/]], function ()
 {
-
-    Route::group(['prefix'=>'api'],function()
-    {
-
-    	Route::group(['prefix'=>'post'],function()
-    	{
-    		Route::post('users',['as'=>'register','uses'=>'UserController@register']);
-    		Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
-    		Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
-    		Route::post('areas',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
-    		Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
-    	});
-    	
-    	Route::group(['prefix'=>'get'],function()
-    	{
-    		Route::post('orders',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
-    		Route::post('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
-    	});
-    	
-    	Route::group(['prefix'=>'put'],function()
-    	{
-    		Route::post('orders',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);
-    		Route::post('rooms',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
-    	});
-    	
-    	Route::group(['prefix'=>'delete'],function()
-    	{
-    		Route::post('orders',['as'=>'deleteOrder','uses'=>'OrderController@deleteOrder']);
-    		Route::post('rooms',['as'=>'deleteRoom','uses'=>'RoomController@deleteOrder']);
-    		Route::post('users/token',['as'=>'logout','uses'=>'UserController@logout']);
-    		Route::post('areas',['as'=>'deleteArea','uses'=>'AreaController@deleteArea']);
-    	});
+    	Route::post('users',['as'=>'register','uses'=>'UserController@register']);
+    	Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
+    	Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
+    	Route::post('areas',['as'=>'newOrder', 'uses'=>'OrderController@newArea']);
+    	Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
+   	
+   		Route::get('orders/{id}',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
+   		Route::get('rooms/{id}',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('areas/{id}',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('orders',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
+   		Route::get('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('areas',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   	
+   		Route::put('orders/{id}',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);    	
+   		Route::put('rooms/{id}',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
+    
+   		Route::delete('orders/{id}',['as'=>'deleteOrder','uses'=>'OrderController@deleteOrder']);
+   		Route::delete('rooms/{id}',['as'=>'deleteRoom','uses'=>'RoomController@deleteRoom']);
+   		Route::delete('users/token',['as'=>'logout','uses'=>'UserController@logout']);
+   		Route::delete('areas/{id}',['as'=>'deleteArea','uses'=>'AreaController@deleteArea']);
+   		Route::delete('users/{id}',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
+   		
+   		
+   		Route::get('test',['uses'=>'UserController@test']);
 });

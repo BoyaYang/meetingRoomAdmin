@@ -9,7 +9,7 @@ class Area extends Model
 	
 	protected $table = 'areas';
 	
-	protected $primaryKey = 'area_id';
+	protected $primaryKey = 'id';
 	
 	public function newArea()
 	{

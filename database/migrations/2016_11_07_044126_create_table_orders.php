@@ -13,20 +13,19 @@ class CreateTableOrders extends Migration
     public function up()
     {
         Schema::create('orders',function (Blueprint $table){
-
-        	$table->increments('order_id');
+        	$table->increments('id');
         	$table->unsignedInteger('user_id')->nullable();
         	$table->unsignedInteger('admin_id')->nullable();
         	$table->text('brief_description');
         	$table->text('inte_description');
-        	$table->timestamps('start_time');
-        	$table->timestamps('end_time');
+        	$table->dateTime('start_time');
+        	$table->dateTime('end_time');
         	$table->unsignedInteger('type');
         	$table->unsignedInteger('status');
         	$table->timestamps();
         	
-        	$table->foreign('admin_id')->references('user_id')->on('users');
-        	$table->foreign('user_id')->references('user_id')->on('users');
+        	$table->foreign('admin_id')->references('id')->on('users');
+        	$table->foreign('user_id')->references('id')->on('users');
         });
     }
 
