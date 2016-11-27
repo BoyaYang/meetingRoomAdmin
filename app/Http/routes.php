@@ -55,20 +55,20 @@ Route::get('/', function ()
 |
 */
 
-Route::group(['middleware' => ['web'/*'GetUserFromToken','RefreshToken']*/]], function ()
+Route::group(['middleware' => ['web','GetUserFromToken','RefreshToken']], function ()
 {
     	Route::post('users',['as'=>'register','uses'=>'UserController@register']);
     	Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
     	Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
-    	Route::post('areas',['as'=>'newOrder', 'uses'=>'OrderController@newArea']);
+    	Route::post('areas',['as'=>'newArea', 'uses'=>'AreaController@newArea']);
     	Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
    	
-   		Route::get('orders/{id}',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
-   		Route::get('rooms/{id}',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
-   		Route::get('areas/{id}',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('orders/{id}',['as'=>'checkOrderOne','uses'=>'OrderController@checkOrder']);
+   		Route::get('rooms/{id}',['as'=>'checkRoomOne','uses'=>'RoomController@checkRoom']);
+   		Route::get('areas/{id}',['as'=>'checkAreaOne','uses'=>'AreaController@checkArea']);
    		Route::get('orders',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
    		Route::get('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
-   		Route::get('areas',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('areas',['as'=>'checkArea','uses'=>'AreaController@checkArea']);
    	
    		Route::put('orders/{id}',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);    	
    		Route::put('rooms/{id}',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
