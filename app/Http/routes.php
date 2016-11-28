@@ -70,14 +70,14 @@ Route::group(['middleware' => ['web']], function ()
    		Route::get('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
    		Route::get('areas',['as'=>'checkArea','uses'=>'AreaController@checkArea']);
    	
-   		Route::put('orders/{id}',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);    	
-   		Route::put('rooms/{id}',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
+   		Route::put('orders',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);
+   		Route::put('rooms',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
     
-   		Route::delete('orders/{id}',['as'=>'deleteOrder','uses'=>'OrderController@deleteOrder']);
-   		Route::delete('rooms/{id}',['as'=>'deleteRoom','uses'=>'RoomController@deleteRoom']);
+   		Route::delete('orders',['as'=>'deleteOrder','uses'=>'OrderController@deleteOrder']);
+   		Route::delete('rooms',['as'=>'deleteRoom','uses'=>'RoomController@deleteRoom']);
    		Route::delete('users/token',['as'=>'logout','uses'=>'UserController@logout']);
-   		Route::delete('areas/{id}',['as'=>'deleteArea','uses'=>'AreaController@deleteArea']);
-   		Route::delete('users/{id}',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
+   		Route::delete('areas',['as'=>'deleteArea','uses'=>'AreaController@deleteArea']);
+   		Route::delete('users',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
    		
    		
    		//Route::get('test',['uses'=>'UserController@test']);

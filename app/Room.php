@@ -98,7 +98,14 @@ class Room extends Model
     	$this->description = $description;
     	$this->galleryful = $galleryful;
     	$this->goods = $goods;
-    	
+
+        $room_exists = $this
+            ->where('area_name',$room_name)
+            ->exists();
+
+        if($room_exists)
+            return ['status'=>0,'msg'=>'area_name has existed'];
+
     	return $this->save()?
     	['status'=>1,'room_id'=>$this->id]:
     	['status'=>0,'msg'=>'db insert failed'];
@@ -124,11 +131,11 @@ class Room extends Model
     		return ['status'=>0,'msg'=>'login required'];
     	}
     	
-    	$room_id = rq('room_id');
-    	if(!$room_id)
-    		return ['status'=>0,'msg'=>'room_id is required'];
+    	$id = rq('id');
+    	if(!$id)
+    		return ['status'=>0,'msg'=>'id is required'];
     	
-    	$room = $this->find($room_id);
+    	$room = $this->find($id);
     	if(!$room)
     		return ['status'=>0,'msg'=>'room not exists'];
     	 
@@ -141,7 +148,6 @@ class Room extends Model
     	$office_time = rq('office_time');
     	$closing_time = rq('closing_time');
     	$time_length = rq('time_length');
-    	$meeting_time = rq('meeting_time');
     	$need_permission = rq('need_permission');
     	$allow_remind = rq('allow_remind');
     	$allow_private_book = rq('allow_private_book');
@@ -168,8 +174,6 @@ class Room extends Model
     		$room->closing_time = $closing_time;
     	if($time_length)
     		$room->time_length = $time_length;
-    	if($meeting_time)
-    		$room->meeting_time = $meeting_time;
     	if($need_permission)
     		$room->need_permission = $need_permission;
     	if($allow_remind)
@@ -196,13 +200,13 @@ class Room extends Model
     		return ['status'=>0,'msg'=>'login required'];
     	}
     	
-    	$id = rq('room_id');
+    	$id = rq('id');
     	if(!$id)
-    		return ['status'=>0,'msg'=>'user_id is required'];
+    		return ['status'=>0,'msg'=>'room_id is required'];
 
     	$room = $this->find($id);
     	if(!$id)
-    		return ['status'=>0,'msg'=>'user not exists'];
+    		return ['status'=>0,'msg'=>'room not exists'];
     	
     	return $room->delete()?
     	['status'=>1]:

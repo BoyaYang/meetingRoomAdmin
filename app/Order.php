@@ -272,15 +272,15 @@ class Order extends Model
     		return ['status'=>0,'msg'=>'login required'];
     	}
     	 
-    	$user_id = rq('user_id');
-    	if(!$user_id)
-    		return ['status'=>0,'msg'=>'user_id is required'];
+    	$id = rq('id');
+    	if(!$id)
+    		return ['status'=>0,'msg'=>'order_id is required'];
     	
-    	$user = $this->find($user_id);
-    	if(!$user)
-    		return ['status'=>0,'msg'=>'user not exists'];
+    	$order = $this->find($id);
+    	if(!$order)
+    		return ['status'=>0,'msg'=>'order not exists'];
     	 
-    	return $user->delete()?
+    	return $order->delete()?
     	['status'=>1]:
     	['status'=>0,'msg'=>'db delete failed'];
     }
