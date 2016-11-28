@@ -60,7 +60,7 @@ Route::group(['middleware' => ['web']], function ()
     	Route::post('users',['as'=>'register','uses'=>'UserController@register']);
     	Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
     	Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
-    	Route::post('areas',['as'=>'newOrder', 'uses'=>'AreaController@newArea']);
+    	Route::post('areas',['as'=>'newArea', 'uses'=>'AreaController@newArea']);
     	Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
    	
    		Route::get('orders/{id}',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
