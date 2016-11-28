@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Request;
 
 class Order extends Model
 {
@@ -24,55 +25,79 @@ class Order extends Model
     private $repeat_type;
     private $stop_repeat_time;
     private $skip_same;
-	
-	//protected $fillable = {}
+
+    private function getInfo()
+    {
+        return Request::all();
+    }
 	
 	private function judgeTime()
 	{
-		
+		$exists = $this
+            ->where('start_time','>=',$this->start_time)
+            ->where('end_time','<=',$this->end_time);
+        if($exists)
+            return true;
+        else
+            return false;
 	}
 	
 	private function saveOrder()
 	{
-		switch ($repeat_type)
+		switch ($this->repeat_type)
 		{
 			//no reputation
 			case 0:{
-				return $this->save()?
-				['status'=>1,'order_id'=>$this->order_id]:
-				['status'=>0,'msg'=>'db insert failed'];
+                if($this->judgeTime())
+                {
+                    return $this->save()?
+                        ['status'=>1,'order_id'=>$this->order_id]:
+                        ['status'=>0,'msg'=>'db insert failed'];
+                }
+                else
+                    return ['status'=>0,'msg'=>'time conflict'];
 				break;
 			}
 			//each day
 			case 1:{
-				$endTime = Carbon::parse($stop_repeat_time);
+				$endTime = Carbon::parse($this->stop_repeat_time);
 				do
 				{
-					$beginTime = Carbon::parse($start_time);
-					$temTime = Carbon::parse($end_time);
-					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
-					
-					$beginTime->addDays(1);
-					$temTime->addDays(1);
-					$start_time = $beginTime->toDateTimeString();
-					$end_time = $temTime->toDateTimeString();
+                    if($this->judgeTime())
+                    {
+                        $beginTime = Carbon::parse($this->start_time);
+                        $temTime = Carbon::parse($this->end_time);
+                        if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+
+                        $beginTime->addDays(1);
+                        $temTime->addDays(1);
+                        $this->start_time = $beginTime->toDateTimeString();
+                        $this->end_time = $temTime->toDateTimeString();
+                    }
+                    else
+                        return ['status'=>0,'msg'=>'time conflict'];
 				}while($beginTime->lt($endTime));
 				
 				return ['status'=>1];
 			}
 			//each week
 			case 2:{
-				$endTime = Carbon::parse($stop_repeat_time);
+				$endTime = Carbon::parse($this->stop_repeat_time);
 				do
 				{
-					$beginTime = Carbon::parse($start_time);
-					$temTime = Carbon::parse($end_time);
-					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
-						
-					$beginTime->addWeeks(1);
-					$temTime->addWeeks(1);
-					$start_time = $beginTime->toDateTimeString();
-					$end_time = $temTime->toDateTimeString();
+				    if($this->judgeTime())
+                    {
+                        $beginTime = Carbon::parse($this->start_time);
+                        $temTime = Carbon::parse($this->end_time);
+                        if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+
+                        $beginTime->addWeeks(1);
+                        $temTime->addWeeks(1);
+                        $this->start_time = $beginTime->toDateTimeString();
+                        $this->end_time = $temTime->toDateTimeString();
+                    }
+					else
+					    return ['status'=>0,'msg'=>'time conflict'];
 				}while($beginTime->lt($endTime));
 				
 				return ['status'=>1];
@@ -80,17 +105,22 @@ class Order extends Model
 			}
 			//each month
 			case 3:{
-				$endTime = Carbon::parse($stop_repeat_time);
+				$endTime = Carbon::parse($this->stop_repeat_time);
 				do
 				{
-					$beginTime = Carbon::parse($start_time);
-					$temTime = Carbon::parse($end_time);
-					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
-			
-					$beginTime->addMonths(1);
-					$temTime->addMonths(1);
-					$start_time = $beginTime->toDateTimeString();
-					$end_time = $temTime->toDateTimeString();
+                    if($this->judgeTime())
+                    {
+                        $beginTime = Carbon::parse($this->start_time);
+                        $temTime = Carbon::parse($this->end_time);
+                        if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+
+                        $beginTime->addMonths(1);
+                        $temTime->addMonths(1);
+                        $this->start_time = $beginTime->toDateTimeString();
+                        $this->end_time = $temTime->toDateTimeString();
+                    }
+					else
+                        return ['status'=>0,'msg'=>'time conflict'];
 				}while($beginTime->lt($endTime));
 			
 				return ['status'=>1];
@@ -98,29 +128,35 @@ class Order extends Model
 			}
 			//each year
 			case 4:{
-				$endTime = Carbon::parse($stop_repeat_time);
+				$endTime = Carbon::parse($this->stop_repeat_time);
 				do
 				{
-					$beginTime = Carbon::parse($start_time);
-					$temTime = Carbon::parse($end_time);
-					if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
-						
-					$beginTime->addYears(1);
-					$temTime->addYears(1);
-					$start_time = $beginTime->toDateTimeString();
-					$end_time = $temTime->toDateTimeString();
+                    if($this->judgeTime())
+                    {
+                        $beginTime = Carbon::parse($this->start_time);
+                        $temTime = Carbon::parse($this->end_time);
+                        if(!$this->save()) return ['status'=>0,'msg'=>'db insert failed'];
+
+                        $beginTime->addYears(1);
+                        $temTime->addYears(1);
+                        $this->start_time = $beginTime->toDateTimeString();
+                        $this->end_time = $temTime->toDateTimeString();
+                    }
+					else
+                        return ['status'=>0,'msg'=>'time conflict'];
 				}while($beginTime->lt($endTime));
 					
 				return ['status'=>1];
 				break;
 			}
 		}
+        return ['status'=>0,'msg'=>'repeat_type required'];
 	}
 	
     public function newOrder()
     {
         /*验证用户是否登录*/
-        if(!user_ins()->is_logged_in())
+        if(!user_insert()->is_logged_in())
         {
             return ['status'=>0,'msg'=>'login required'];
         }
@@ -167,13 +203,13 @@ class Order extends Model
         $this->stop_repeat_time = $stop_repeat_time;
         $this->repeat_type = $repeat_type;
         
-        return saveOrder();
+        return $this->saveOrder();
     }
     
     public function updateOrder()
     {
     	/*验证用户是否登录*/
-    	if(!user_ins()->is_logged_in())
+    	if(!user_insert()->is_logged_in())
     	{
     		return ['status'=>0,'msg'=>'login required'];
     	}
@@ -231,7 +267,7 @@ class Order extends Model
     
     public function deleteOrder()
     {
-    	if(!user_ins()->is_logged_in())
+    	if(!user_insert()->is_logged_in())
     	{
     		return ['status'=>0,'msg'=>'login required'];
     	}

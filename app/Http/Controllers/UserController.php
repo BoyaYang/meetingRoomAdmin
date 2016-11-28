@@ -10,26 +10,26 @@ class UserController extends Controller
 {
     public function register()
     {
-        return user_ins()->register();
+        return user_insert()->register();
     }
 
     public function login()
     {
-        return user_ins()->login();
+        return user_insert()->login();
     }
     
     public function logout()
     {
-    	return user_ins()->logout();
+    	return user_insert()->logout();
     }
     
     public function deleteUser()
     {
-    	return user_ins()->deleteRoom();
+    	return user_insert()->deleteUser();
     }
     
-    public function test()
+   /* public function test()
     {
-    	return dd(user_ins()->is_logged_in());
-    }
+    	return dd(user_insert()->is_logged_in());
+    }*/
 }

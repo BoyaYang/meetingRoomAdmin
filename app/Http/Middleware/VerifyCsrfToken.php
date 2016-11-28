@@ -15,5 +15,8 @@ class VerifyCsrfToken extends BaseVerifier
         'users',
         'users/token',
         'post/users',
+        'orders',
+        'rooms',
+        'areas'
     ];
 }

@@ -17,22 +17,22 @@ function rq($key=null,$default=null)
     else return Request::input($key,$default);
 }
 
-function user_ins()
+function user_insert()
 {
     return new App\User;
 }
 
-function room_ins()
+function room_insert()
 {
     return new App\Room;
 }
 
-function order_ins()
+function order_insert()
 {
     return new App\Order;
 }
 
-function area_ins()
+function area_insert()
 {
 	return new App\Area;
 }
@@ -55,17 +55,17 @@ Route::get('/', function ()
 |
 */
 
-Route::group(['middleware' => ['web','GetUserFromToken','RefreshToken']], function ()
+Route::group(['middleware' => ['web']], function ()
 {
     	Route::post('users',['as'=>'register','uses'=>'UserController@register']);
     	Route::post('users/token',['as'=>'login', 'uses'=>'UserController@login']);
     	Route::post('orders',['as'=>'newOrder', 'uses'=>'OrderController@newOrder']);
-    	Route::post('areas',['as'=>'newArea', 'uses'=>'AreaController@newArea']);
+    	Route::post('areas',['as'=>'newOrder', 'uses'=>'AreaController@newArea']);
     	Route::post('rooms',['as'=>'newRoom', 'uses'=>'RoomController@newRoom']);
    	
-   		Route::get('orders/{id}',['as'=>'checkOrderOne','uses'=>'OrderController@checkOrder']);
-   		Route::get('rooms/{id}',['as'=>'checkRoomOne','uses'=>'RoomController@checkRoom']);
-   		Route::get('areas/{id}',['as'=>'checkAreaOne','uses'=>'AreaController@checkArea']);
+   		Route::get('orders/{id}',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
+   		Route::get('rooms/{id}',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
+   		Route::get('areas/{id}',['as'=>'checkArea','uses'=>'RoomController@checkArea']);
    		Route::get('orders',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
    		Route::get('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
    		Route::get('areas',['as'=>'checkArea','uses'=>'AreaController@checkArea']);
@@ -80,5 +80,5 @@ Route::group(['middleware' => ['web','GetUserFromToken','RefreshToken']], functi
    		Route::delete('users/{id}',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
    		
    		
-   		Route::get('test',['uses'=>'UserController@test']);
+   		//Route::get('test',['uses'=>'UserController@test']);
 });

@@ -10,21 +10,21 @@ class OrderController extends Controller
 {
     public function newOrder()
     {
-        return order_ins()->newOrder();
+        return order_insert()->newOrder();
     }
     
     public function checkOrder()
     {
-    	return room_ins()->checkOrder();
+    	return room_insert()->checkOrder();
     }
     
     public function updateOrder()
     {
-    	return order_ins()->updateOrder();
+    	return order_insert()->updateOrder();
     }
     
     public function deleteOrder()
     {
-    	return order_ins()->deleteOrder();
+    	return order_insert()->deleteOrder();
     }
 }

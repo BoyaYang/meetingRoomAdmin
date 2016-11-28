@@ -10,11 +10,11 @@ class AreaController extends Controller
 {
 	public function newArea()
 	{
-		return area_ins()->newArea();
+		return area_insert()->newArea();
 	}
 	
 	public function deleteArea()
 	{
-		return area_ins()->deleteArea();
+		return area_insert()->deleteArea();
 	}
 }

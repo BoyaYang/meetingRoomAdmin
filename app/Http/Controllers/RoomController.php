@@ -10,21 +10,21 @@ class RoomController extends Controller
 {
 	public function newRoom()
 	{
-		return room_ins()->newRoom();
+		return room_insert()->newRoom();
 	}
 	
 	public function checkRoom()
 	{
-		return room_ins()->checkRoom();
+		return room_insert()->checkRoom();
 	}
 	
 	public function updateRoom()
 	{
-		return room_ins()->updateRoom();
+		return room_insert()->updateRoom();
 	}
 	
 	public function deleteRoom()
 	{
-		return room_ins()->deleteRoom();
+		return room_insert()->deleteRoom();
 	}
 }

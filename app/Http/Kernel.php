@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        //\Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        //\Tymon\JWTAuth\Middleware\RefreshToken::class,
     ];
 
     /**
@@ -29,6 +31,9 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            //\Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+            //\Tymon\JWTAuth\Middleware\RefreshToken::class,
+
         ],
 
         'api' => [

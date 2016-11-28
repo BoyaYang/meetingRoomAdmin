@@ -14,7 +14,7 @@ class Area extends Model
 	public function newArea()
 	{
 		/*验证用户是否登录*/
-		if(!user_ins()->is_logged_in())
+		if(!user_insert()->is_logged_in())
 		{
 			return ['status'=>0,'msg'=>'login required'];
 		}
@@ -39,22 +39,22 @@ class Area extends Model
 		$area->area_name = $area_name;
 		
 		return $area->save()?
-		['status'=>1,'area_id'=>$user->area_id]:
+		['status'=>1,'area_id'=>$area->id]:
 		['status'=>0,'msg'=>'db insert failed'];
 	}
 	
 	public function deleteArea()
 	{
-		if(!user_ins()->is_logged_in())
+		if(!user_insert()->is_logged_in())
 		{
 			return ['status'=>0,'msg'=>'login required'];
 		}
 		
-		$area_id = rq('area_id');
-		if(!$area_id)
+		$id = rq('id');
+		if(!$id)
 			return ['status'=>0,'msg'=>'area_id is required'];
 		 
-		$area = $this->find($area_id);
+		$area = $this->find($id);
 		if(!$area)
 			return ['status'=>0,'msg'=>'area not exists'];
 		

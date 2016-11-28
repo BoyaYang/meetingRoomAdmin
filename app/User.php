@@ -10,6 +10,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 //use App\Http\Requests\Request;
 use Request;
+use Response;
+use Cookie;
 
 class User extends Model
 {
@@ -134,8 +136,8 @@ class User extends Model
         //}
         
         // all good so return the token
-        return response()->json($token);
-        
+        return Response::make($token)
+            ->withCookie(Cookie::make('token', $token));
         
         /*将用户信息写入session*/
         /*session()->put('username',$user->username);
@@ -147,7 +149,10 @@ class User extends Model
     
     public function logout()
     {
-    	JWTAuth::invalidate(Request::input('token'));
+    	if(!JWTAuth::invalidate(Request::input('token')))
+    	    return response()->json(['status'=>0, 'msg'=>'logout error']);
+        else
+            return response()->json(['status'=>1, 'msg'=>'logout success']);
     }
 
     /*检测用户是否登录*/
