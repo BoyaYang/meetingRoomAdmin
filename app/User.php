@@ -76,15 +76,14 @@ class User extends Model
 
         $hash_password = Hash::make($userInfo['password']);
 
-        $user = $this;
-        $user->username = $userInfo['username'];
-        $user->password = $hash_password;
-        $user->phone = $userInfo['phone'];
-        $user->email = $userInfo['email'];
-		$user->auth = $userInfo['auth'];
-        return $user->save()?
-            response()->json(['status'=>1,'user_id'=>$user->id]):
-            response()->json(['status'=>0,'msg'=>'db insert failed']);
+        $this->username = $userInfo['username'];
+        $this->password = $hash_password;
+        $this->phone = $userInfo['phone'];
+        $this->email = $userInfo['email'];
+        $this->auth = $userInfo['auth'];
+        $this->activeByEmail = 0;
+        $this->activeByPhone = 0;
+        return $this->getEmailVerf();
     }
 
     public function login()
@@ -163,4 +162,66 @@ class User extends Model
         //return session('user_id')?true: false;
         //return session()->all();
     }
+
+    public function getEmailVerf()
+    {
+        $userInfo = getInfo();
+        $now = time();
+        $email_address = $userInfo['email'];
+        if(!$email_address)
+            return response()->json(['status'=>'0','msg'=>'email required']);
+        $token = Hash::make($userInfo['username'].$userInfo['email'].$now);
+        $this->tokenByEmail = $token;
+        $this->tokenByEmail = "";
+        /*$db_email = $this->where('email',$email_address)->first();
+        if(!$db_email)
+        {
+            $this->email = $email_address;
+            $this->emailVerf = $token;
+            if(!$this->save())
+                return response()->json(['status'=>'0','msg'=>'db insert failed']);
+        }
+        else
+        {
+            $db_email->email = $email_address;
+            $db_email->emailVerf = $token;
+            if(!$db_email->save())
+                return response()->json(['status'=>'0','msg'=>'db insert failed']);
+        }*/
+        /*Mail::send(['text'=>'view'],$code,function($message){
+            $message->from('yangbingyan159@163.com','meetingTest');
+            $message->to($this->getInfo()['email']);
+        });*/
+        $data = ['code'=>$token];
+        Mail::send(['text'=>'emailVerf'],$data,function($message)use($email_address)
+        {
+            $message->from('yangbingyan159@163.com','meetingTest');
+            $message->to($email_address)->subject("欢迎注册会议室管理系统");
+        });
+        return $this->save()?
+            response()->json(['status'=>1,'user_id'=>$this->id]):
+            response()->json(['status'=>0,'msg'=>'db insert failed']);
+    }
+
+    public function checkEmailVerf()
+    {
+        $token = Request::input('token');
+        $email = Request::input('email');
+        $user = $this->where('email',$email)->first();
+        if(!$user)
+            response()->json(['status'=>0, 'msg'=>'email not exists']);
+        $hashed_token = $user->tokenByEmail;
+        if(!Hash::check($token,$hashed_token))
+        {
+            return response()->json(['status'=>0, 'msg'=>'wrong token']);
+        }
+        else
+            $user->activeByEmail = 1;
+
+        return $user->save()?
+            response()->json(['status'=>1,'user_id'=>$user->id]):
+            response()->json(['status'=>0,'msg'=>'db insert failed']);
+
+    }
+
 }

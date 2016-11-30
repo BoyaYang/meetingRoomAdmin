@@ -13,6 +13,11 @@ class UserController extends Controller
         return user_insert()->register();
     }
 
+    public function emailVerification()
+    {
+        return user_insert()->checkEmailVerf();
+    }
+
     public function login()
     {
         return user_insert()->login();

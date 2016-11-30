@@ -11,6 +11,7 @@ storage/*.key
 .env.*.php
 .env.php
 .env
+.workspace.xml
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/

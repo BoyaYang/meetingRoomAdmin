@@ -37,12 +37,17 @@ function area_insert()
 	return new App\Area;
 }
 
+function verification_insert()
+{
+    return new App\Verification;
+}
+
 Route::get('/', function ()
 {
     return view('welcome');
 });
 
-
+Route::get('test',['uses'=>'VerificationController@emailVerf']);
 
 /*
 |--------------------------------------------------------------------------
@@ -80,5 +85,5 @@ Route::group(['middleware' => ['web']], function ()
    		Route::delete('users',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
    		
    		
-   		//Route::get('test',['uses'=>'UserController@test']);
+        Route::get('test',['uses'=>'UserController@emailVerification']);
 });
