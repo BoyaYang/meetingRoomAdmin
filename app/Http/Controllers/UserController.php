@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function emailVerification()
     {
-        return user_insert()->checkEmailVerf();
+        return user_insert()->checkEmailVerification();
     }
 
     public function login()
@@ -31,6 +31,11 @@ class UserController extends Controller
     public function deleteUser()
     {
     	return user_insert()->deleteUser();
+    }
+
+    public function phoneVerification()
+    {
+        return user_insert()->checkPhoneVerification();
     }
     
    /* public function test()

@@ -37,11 +37,6 @@ function area_insert()
 	return new App\Area;
 }
 
-function verification_insert()
-{
-    return new App\Verification;
-}
-
 Route::get('/', function ()
 {
     return view('welcome');

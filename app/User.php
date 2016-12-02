@@ -12,6 +12,8 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 use Request;
 use Response;
 use Cookie;
+use Validator;
+use Toplan\Sms\Facades\SmsManager;
 
 class User extends Model
 {
@@ -163,7 +165,7 @@ class User extends Model
         //return session()->all();
     }
 
-    public function getEmailVerf()
+    public function getEmailVerification()
     {
         $userInfo = getInfo();
         $now = time();
@@ -203,7 +205,7 @@ class User extends Model
             response()->json(['status'=>0,'msg'=>'db insert failed']);
     }
 
-    public function checkEmailVerf()
+    public function checkEmailVerification()
     {
         $token = Request::input('token');
         $email = Request::input('email');
@@ -224,4 +226,16 @@ class User extends Model
 
     }
 
+    public function checkPhoneVerification()
+    {
+        $validator = Validator::make(Request::all(), [
+            'mobile'     => 'required|confirm_mobile_not_change|confirm_rule:mobile_required',
+            'verifyCode' => 'required|verify_code',
+        ]);
+        if ($validator->fails()) {
+            //验证失败后清空存储的发送状态，防止用户重复试错
+            SmsManager::forgetState();
+            return redirect()->back()->withErrors($validator);
+        }
+    }
 }
