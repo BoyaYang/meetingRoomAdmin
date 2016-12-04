@@ -21,7 +21,6 @@ class CreateTableUsers extends Migration
             $table->string('auth')->default('user');  //enum  user,admin
             $table->string('tokenByEmail');
             $table->unsignedInteger('activeByEmail');
-            $table->string('tokenByPhone');
             $table->unsignedInteger('activeByPhone');
             $table->timestamps();
         });

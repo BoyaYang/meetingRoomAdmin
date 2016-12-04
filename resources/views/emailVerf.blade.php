@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
   </head>
 <body>
-  <a href="{{ URL().""."" }}" target="_blank">点击激活你的账号</a>
+  <h1>Hi!</h1>
+  <p>请点击下方链接激活你的账号</p>
+  <a href="{{ URL('test')."?token=".$token."&email=".$email}}" target="_blank">点击激活您的账号</a>
 </body>
 </html>
 

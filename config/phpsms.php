@@ -167,7 +167,7 @@ return [
             'secretKey' => 'adaf1f80e5405bdc4723059e9d80edfc',
 
             //短信签名，传入的短信签名必须是在阿里大鱼“管理中心-短信签名管理”中的可用签名
-            'smsFreeSignName' => 'your sms free sign name',
+            'smsFreeSignName' => '会议室预订系统',
 
             //被叫号显(用于语音通知)，传入的显示号码必须是阿里大鱼“管理中心-号码管理”中申请或购买的号码
             'calledShowNum' => 'your called show num',

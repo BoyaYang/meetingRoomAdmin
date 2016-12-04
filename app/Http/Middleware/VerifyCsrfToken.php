@@ -17,6 +17,7 @@ class VerifyCsrfToken extends BaseVerifier
         'post/users',
         'orders',
         'rooms',
-        'areas'
+        'areas',
+        'laravel-sms/verify-code'
     ];
 }

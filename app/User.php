@@ -2,9 +2,9 @@
 
 namespace App;
 
+use Mail;
 use Hash;
 use Illuminate\Database\Eloquent\Model;
-//use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
@@ -23,11 +23,6 @@ class User extends Model
 	protected $primaryKey = 'id';
 	
 	//protected Request $request;
-	
-	public function getInfo()
-	{
-		return Request::all();//only('username','password','phone','email','auth');
-	}
 	
 	public function getAuthenticatedUser()
 	{
@@ -51,63 +46,69 @@ class User extends Model
 	
     public function register()
     {
-        /*$username = rq('username');
-        $password = rq('password');
-        $phone = rq('phone');
-        $email = rq('email');
-        $auth = rq('auth');*/
+        $username = request_input('username');
+        $password = request_input('password');
+        $phone = request_input('phone');
+        $email = request_input('email');
     	
-    	$userInfo = $this->getInfo();
-    	
-        if(!$userInfo['username'])
+        if(!$username)
             return response()->json(['status'=>0,'msg'=>'username required']);
-        if(!$userInfo['password'])
+        if(!$password)
             return response()->json(['status'=>0,'msg'=>'password required']);
-        if(!$userInfo['phone'])
-            return response()->json(['status'=>0,'msg'=>'phone_number required']);
-        if(!$userInfo['email'])
-            return response()->json(['status'=>0,'msg'=>'email required']);
-        if(!$userInfo['auth'])
-        	return response()->json(['status'=>0,'msg'=>'auth required']);
+        if(!$phone&&!$email)
+            return response()->json(['status'=>0,'msg'=>'phone or email required']);
         $user_exists = $this
-            ->where('username',$userInfo['username'])
+            ->where('username',$username)
             ->exists();
 
         if($user_exists)
             return response()->json(['status'=>0,'msg'=>'username has existed']);
 
-        $hash_password = Hash::make($userInfo['password']);
+        $hash_password = Hash::make($password);
 
-        $this->username = $userInfo['username'];
+        $this->username = $username;
         $this->password = $hash_password;
-        $this->phone = $userInfo['phone'];
-        $this->email = $userInfo['email'];
-        $this->auth = $userInfo['auth'];
+        $this->auth = 'user';
         $this->activeByEmail = 0;
         $this->activeByPhone = 0;
-        return $this->getEmailVerf();
+
+        if(!$email)
+        {
+            $this->phone = $phone;
+            $this->email = "";
+            $phone_verification = request_input('phone_verification');
+            if(!$phone_verification)
+                return response()->json(['status'=>0,'msg'=>'phone verification required']);
+            return $this->checkPhoneVerification();
+        }
+
+       else
+       {
+           $this->phone = "";
+           $this->email = $email;
+           return $this->getEmailVerification();
+       }
     }
 
     public function login()
     {
-    	$userInfo = $this->getInfo();
-        /*$username = rq('username');
-        $password = rq('password');*/
+        $username = request_input('username');
+        $password = request_input('password');
     	
         /*检查用户名和密码是否为空*/
 
-        if(!$userInfo['username'])
+        if(!$username)
         {
             return response()->json(['status'=>0, 'msg'=>'username required']);
         }
 
-        if(!$userInfo['password'])
+        if(!$password)
         {
             return response()->json(['status'=>0, 'msg'=>'password required']);
         }
 
         /*检查用户是否存在*/
-        $user = $this->where('username',$userInfo['username'])->first();//返回数据库的第一条
+        $user = $this->where('username',$username)->first();//返回数据库的第一条
 
         if(!$user) 
         {
@@ -116,7 +117,12 @@ class User extends Model
 
         /*检查密码是否正确*/
         $hashed_password = $user->password;
-        if(!Hash::check($userInfo['password'],$hashed_password))
+        if(!Hash::check($password,$hashed_password))
+        {
+            return response()->json(['status'=>0, 'msg'=>'account inactive']);
+        }
+
+        if(!$user->activeByEmail||!$user->activeByPhone)
         {
             return response()->json(['status'=>0, 'msg'=>'wrong password']);
         }
@@ -160,44 +166,19 @@ class User extends Model
     public function is_logged_in()
     {
     	return $this->getAuthenticatedUser();
-        /*如果session中存在user_id就返回user_id,否则返回false*/
-        //return session('user_id')?true: false;
-        //return session()->all();
     }
 
     public function getEmailVerification()
     {
-        $userInfo = getInfo();
+        $email_address = request_input('email');
+        $username = request_input('username');
         $now = time();
-        $email_address = $userInfo['email'];
         if(!$email_address)
             return response()->json(['status'=>'0','msg'=>'email required']);
-        $token = Hash::make($userInfo['username'].$userInfo['email'].$now);
+        $token = Hash::make($username.$email_address.$now);
         $this->tokenByEmail = $token;
-        $this->tokenByEmail = "";
-        /*$db_email = $this->where('email',$email_address)->first();
-        if(!$db_email)
+        Mail::send('emailVerf',['token'=>$token,'email'=>$email_address],function($message)use($email_address)
         {
-            $this->email = $email_address;
-            $this->emailVerf = $token;
-            if(!$this->save())
-                return response()->json(['status'=>'0','msg'=>'db insert failed']);
-        }
-        else
-        {
-            $db_email->email = $email_address;
-            $db_email->emailVerf = $token;
-            if(!$db_email->save())
-                return response()->json(['status'=>'0','msg'=>'db insert failed']);
-        }*/
-        /*Mail::send(['text'=>'view'],$code,function($message){
-            $message->from('yangbingyan159@163.com','meetingTest');
-            $message->to($this->getInfo()['email']);
-        });*/
-        $data = ['code'=>$token];
-        Mail::send(['text'=>'emailVerf'],$data,function($message)use($email_address)
-        {
-            $message->from('yangbingyan159@163.com','meetingTest');
             $message->to($email_address)->subject("欢迎注册会议室管理系统");
         });
         return $this->save()?
@@ -211,9 +192,9 @@ class User extends Model
         $email = Request::input('email');
         $user = $this->where('email',$email)->first();
         if(!$user)
-            response()->json(['status'=>0, 'msg'=>'email not exists']);
+            return response()->json(['status'=>0, 'msg'=>'email not exists']);
         $hashed_token = $user->tokenByEmail;
-        if(!Hash::check($token,$hashed_token))
+        if($token!=$hashed_token)
         {
             return response()->json(['status'=>0, 'msg'=>'wrong token']);
         }
@@ -236,6 +217,12 @@ class User extends Model
             //验证失败后清空存储的发送状态，防止用户重复试错
             SmsManager::forgetState();
             return redirect()->back()->withErrors($validator);
+        }
+        else{
+            $this->activeByPhone = 1;
+            return $this->save()?
+                response()->json(['status'=>1,'user_id'=>$this->id]):
+                response()->json(['status'=>0,'msg'=>'db insert failed']);
         }
     }
 }

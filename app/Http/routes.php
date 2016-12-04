@@ -11,7 +11,7 @@
 |
 */
 
-function rq($key=null,$default=null)
+function request_input($key=null,$default=null)
 {
     if(!$key) return Request::all();
     else return Request::input($key,$default);
@@ -42,8 +42,6 @@ Route::get('/', function ()
     return view('welcome');
 });
 
-Route::get('test',['uses'=>'VerificationController@emailVerf']);
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -69,6 +67,7 @@ Route::group(['middleware' => ['web']], function ()
    		Route::get('orders',['as'=>'checkOrder','uses'=>'OrderController@checkOrder']);
    		Route::get('rooms',['as'=>'checkRoom','uses'=>'RoomController@checkRoom']);
    		Route::get('areas',['as'=>'checkArea','uses'=>'AreaController@checkArea']);
+        Route::get('emailVerf',['as'=>'test','uses'=>'UserController@emailVerification']);
    	
    		Route::put('orders',['as'=>'updateOrder', 'uses'=>'OrderController@updateOrder']);
    		Route::put('rooms',['as'=>'updateRoom', 'uses'=>'RoomController@updateRoom']);
@@ -80,5 +79,5 @@ Route::group(['middleware' => ['web']], function ()
    		Route::delete('users',['as'=>'deleteUser','uses'=>'UserController@deleteUser']);
    		
    		
-        Route::get('test',['uses'=>'UserController@emailVerification']);
+
 });
